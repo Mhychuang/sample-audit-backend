@@ -104,7 +104,10 @@ dist
 .tern-port
 
 # dbconfig
+.dbconfig
 .dbconfig.js
+/dbconfig
+/dbconfig.js
 
 # file
 /files
