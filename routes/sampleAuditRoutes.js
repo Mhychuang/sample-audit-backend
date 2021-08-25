@@ -8,11 +8,11 @@ const sampleAuditHelpers = require('../dboperation/sampleAuditDbOperation')
 const sampleAuditController = require('../controllers/sampleAuditController')
 
 
-router.get('/getAllSample', sampleAuditController.getSamples)
+router.get('/getAllSample', sampleAuditController.getAllSampleCon)
 
-router.get('/sampleAudit/:countyid', sampleAuditController.getSampleByCounty)
+router.get('/sampleAudit/:countyid', sampleAuditController.getSampleByCountyCon)
 
-router.get('/allCounty', sampleAuditController.getSampleAllCounty)
+router.get('/allCounty', sampleAuditController.getCountyValueCon)
 
 router.get('/getSampleIdByCounty/:countyid', sampleAuditController.getSampleIdByCountyCon)
 
