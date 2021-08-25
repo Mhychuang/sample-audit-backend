@@ -34,7 +34,7 @@ async function getSampleIdByCounty(countyId) {
 }
 
 
-async function getByCounty(countyId) {
+async function getSampleByCounty(countyId) {
     try {
         let pool = await sql.connect(config);
         let product = await pool.request()
@@ -61,8 +61,7 @@ async function getCoutyValue(countyId) {
     }
 }
 
-
-async function getDetailByCountySampleId(countyId, sampleId) {
+async function getSampleDetailByCountySampleId(countyId, sampleId) {
     try {
         let pool = await sql.connect(config);
        
@@ -162,10 +161,7 @@ async function updateSample(Sample) {
         //const date2 = String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds()) + ":" + String(TimeObject.getMilliseconds())
 
         console.log(date2);
-   
 
-        
-        
         
         let detail = await pool.request()
             .input('CountyId', sql.Int, Sample.CountyId)
@@ -199,10 +195,6 @@ async function updateSample(Sample) {
 }
 
 
-
-
-
-
 async function addOrder(order) {
 
     try {
@@ -225,17 +217,14 @@ async function addOrder(order) {
 
 
 
-
-
 module.exports = {
     getAllSample:  getAllSample,
-    getByCounty:   getByCounty,
-    getCoutyValue: getCoutyValue,
     getSampleIdByCounty: getSampleIdByCounty,
-    getDetailByCountySampleId: getDetailByCountySampleId,
-    updateSample: updateSample,
+    getSampleByCounty:   getSampleByCounty,
+    getCoutyValue: getCoutyValue,
+    getSampleDetailByCountySampleId: getSampleDetailByCountySampleId,
     getCandidateByCountySampleId: getCandidateByCountySampleId,
     updateCandidate: updateCandidate,
+    updateSample: updateSample,
     addOrder: addOrder
-    
 }
