@@ -10,7 +10,7 @@ const sampleAuditController = require('../controllers/sampleAuditController')
 
 router.get('/getAllSample', sampleAuditController.getAllSampleCon)
 
-router.get('/sampleAudit/:countyid', sampleAuditController.getSampleByCountyCon)
+router.get('/getSample/:countyid', sampleAuditController.getSampleByCountyCon)
 
 router.get('/allCounty', sampleAuditController.getCountyValueCon)
 
@@ -20,9 +20,9 @@ router.get('/getDetailByCountySampleId/:countyid/:sampleid', sampleAuditControll
 
 router.get('/getCandidateByCountySampleId/:countyid/:sampleid', sampleAuditController.getCandidateByCountySampleIdCon)
 
-router.put('/updateCandidate/:CandidateId', sampleAuditController.updateCandidateCon)
+router.put('/updateCandidate', sampleAuditController.updateCandidateCon)
 
-router.put('/updateSample/:countyid/:sampleid', sampleAuditController.updateSampleCon)
+router.put('/updateSample', sampleAuditController.updateSampleCon)
 
 router.post('/orders', sampleAuditController.addOrderCon)
 

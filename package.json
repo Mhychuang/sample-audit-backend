@@ -1,7 +1,7 @@
 {
   "name": "nodejsapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "sample-audit-backend express with sqlServer",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -21,5 +21,13 @@
   },
   "keywords": [],
   "author": "Dhananjay Kumar <debugmode@outlook.com> (https://debugmode.net)",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mhychuang/sample-audit-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mhychuang/sample-audit-backend/issues"
+  },
+  "homepage": "https://github.com/Mhychuang/sample-audit-backend#readme"
 }

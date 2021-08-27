@@ -17,6 +17,7 @@ const getSampleByCountyCon = async (req, res) => {
 
 const getCountyValueCon = async (req, res) => {
     dboperations.getCoutyValue().then(result => {
+        console.log(result);
         res.json(result[0]);
     })
 }
@@ -34,7 +35,6 @@ const getSampleDetailByCountySampleIdCon = async (req, res) => {
     try {
         const result = await dboperations.getSampleDetailByCountySampleId(countyid, sampleid);
         res.json(result[0][0]);
-        })
     } catch (error) {
         console.error();
         console.log(error);
@@ -58,8 +58,8 @@ const getCandidateByCountySampleIdCon = async (req, res) => {
 const updateCandidateCon = async (req, res) => {
     let can = { ...req.body }
     try {
-        const result = await updateCandidate(can.SampleCandidateId, can.Machine, can.HandToEye, can.DifferenceInCount)
-        res.status(201);
+        const result = await dboperations.updateCandidate(can.SampleCandidateId, can.CandidateName,can.Machine, can.HandToEye, can.DifferenceInCount);
+        res.status(201).json(result[0]);
     } catch (error) {
         console.log('can', error);
         console.error();
@@ -70,13 +70,13 @@ const updateCandidateCon = async (req, res) => {
 const updateSampleCon = async (req, res) => {
     let sample = {...req.body}
 
-    dboperations.updateSample(Sample).then(result => {
+    dboperations.updateSample(sample).then(result => {
         for (let i = 0; i < 50000; i++) {
             // ???
         }
         res.status(201).json(result);
     }).then((response) => {
-        console.log(response)
+        console.log('what is this?',response)
     }).catch((error) => {
         console.log(error)
     })

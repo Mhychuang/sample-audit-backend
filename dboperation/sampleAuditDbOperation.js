@@ -48,7 +48,7 @@ async function getSampleByCounty(countyId) {
     }
 }
 
-async function getCoutyValue(countyId) {
+async function getCoutyValue() {
     try {
         let pool = await sql.connect(config);
         let queryString = `select distinct CountyId, CountyName FROM SampleAudit`
@@ -119,27 +119,31 @@ WHERE CountyId = @CountyID AND SampleId = @SampleID`);
 }
 
 
-async function updateCandidate(SampleCandidateId, Machine, HandToEye, DifferenceInCount) {
+async function updateCandidate(SampleCandidateId, CandidateName, Machine, HandToEye, DifferenceInCount) {
     console.log('updateFunction', SampleCandidateId, Machine, HandToEye, DifferenceInCount)
     try {
         let pool = await sql.connect(config);
        
         let detail = await pool.request()
             .input('SampleCandidateId', sql.Int, SampleCandidateId)
+            .input('CandidateName', sql.NVarChar, CandidateName)
             .input('Machine', sql.Int, Machine)
             .input('HandToEye', sql.Int, HandToEye)
             .input('DifferenceInCount', sql.Int, DifferenceInCount)
             .query(`UPDATE [ELECTION_AUDIT].[dbo].[SampleAuditCandidate]
                     SET
+                    CandidateName=@CandidateName, 
                     Machine =@Machine,
                     HandToEye = @HandToEye,
                     DifferenceInCount = @DifferenceInCount
                     WHERE SampleCandidateId = @SampleCandidateId`);
+        console.log('here!')
         return detail.recordsets;
 
     }
     catch (error) {
-        console.log(error);
+        console.log('updateCandidate error', error);
+//        console.log(error);
     }
 }
 
@@ -151,18 +155,26 @@ async function updateSample(Sample) {
         DateObject = new Date(Sample.DateOfCount);
         TimeObject = new Date(Sample.TimeOfCount);
 
-        const date1 = String(DateObject.getMonth()) + "/" +String(DateObject.getDate()) + "/" + String(DateObject.getFullYear());
-        console.log(date1);
+        let date1 = String(Sample.DateOfCount)
+        date1 = date1.slice(0, -1)
+
+        // const date1 = String(DateObject.getMonth()) + "/" +String(DateObject.getDate()) + "/" + String(DateObject.getFullYear());
+        // console.log(date1);
 
        /* console.log('TimeObject', TimeObject.getHours());*/
         //const date2 = "05/31/1990 15:01:54"
-        const date2 = date1 + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds())
+        //const date2 = date1 + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds())
 
         //const date2 = String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds()) + ":" + String(TimeObject.getMilliseconds())
 
-        console.log(date2);
+        let date2 = String(Sample.TimeOfCount);
 
+        date2 = date2.split(',')[0] + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds());
+  
         
+
+        //sql.DateTimeOffset
+
         let detail = await pool.request()
             .input('CountyId', sql.Int, Sample.CountyId)
             .input('SampleId', sql.Int, Sample.SampleID)
