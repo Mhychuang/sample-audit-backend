@@ -155,8 +155,14 @@ async function updateSample(Sample) {
         DateObject = new Date(Sample.DateOfCount);
         TimeObject = new Date(Sample.TimeOfCount);
 
+        console.log('og',Sample.DateOfCount)
+
         let date1 = String(Sample.DateOfCount)
+        
         date1 = date1.slice(0, -1)
+        console.log('date1', date1)
+
+
 
         // const date1 = String(DateObject.getMonth()) + "/" +String(DateObject.getDate()) + "/" + String(DateObject.getFullYear());
         // console.log(date1);
@@ -169,9 +175,9 @@ async function updateSample(Sample) {
 
         let date2 = String(Sample.TimeOfCount);
 
-        date2 = date2.split(',')[0] + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds());
+        date2 = "05/31/1990" + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds());
   
-        
+        console.log(date2)
 
         //sql.DateTimeOffset
 

@@ -3,9 +3,14 @@ const { getUserByEmail, updatePassword } = require("../dboperation/user");
 
 
 //http://localhost:4000/auth/testuser1@alamance.gov/randomHash1
+//http://localhost:4000/auth/testuser1@alamance.gov
 const getUserLogin = async (req, res) => {
-    let email = req.params.email;
-    let password = req.params.password;
+    let data = { ...req.body }
+
+    console.log('In getUserLogin', req.body)
+
+    let email = data.email;
+    let password = data.password;
 
     try {
 
@@ -17,7 +22,8 @@ const getUserLogin = async (req, res) => {
 
         } else {
             console.log(userInfo[0][0].UserPassword)
-            if (password === userInfo[0][0].UserPassword) {
+            
+            if (password == userInfo[0][0].UserPassword) {
                 res.status(200).json(userInfo[0][0]);
             } else {
                 res.status(200).json("login fail");
