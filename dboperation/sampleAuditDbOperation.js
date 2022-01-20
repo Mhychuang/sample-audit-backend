@@ -51,8 +51,9 @@ async function getSampleByCounty(countyId) {
 async function getCoutyValue() {
     try {
         let pool = await sql.connect(config);
-        let queryString = `select distinct CountyId, CountyName FROM SampleAudit`
+        let queryString = `select distinct CountyId as value,  CountyName as label FROM SampleAudit`
         let countyList = await pool.request().query(queryString);
+        console.log(countyList)
         return countyList.recordsets;
 
     }
@@ -78,7 +79,7 @@ SELECT [CountyId]
       ,[TypeOfSample]
       ,[PrecinctSiteName]
       ,[VotingEquipmentUsed]
-      ,[ContestName]
+      
       ,[HumanOrMachineError]
       ,[DifferenceExplanation]
       ,[PeoplePartyCounting]
@@ -105,11 +106,13 @@ async function getCandidateByCountySampleId(countyId, sampleId) {
             .query(`  SELECT
        SampleCandidateId
       ,CandidateName
+      ,ContestName
       ,Machine
       ,HandToEye
       ,DifferenceInCount
   FROM SampleAuditCandidate
 WHERE CountyId = @CountyID AND SampleId = @SampleID`);
+    console.log('candidate data from here',candidateData)
         return candidateData.recordsets;
 
     }
@@ -119,7 +122,23 @@ WHERE CountyId = @CountyID AND SampleId = @SampleID`);
 }
 
 
-async function updateCandidate(SampleCandidateId, CandidateName, Machine, HandToEye, DifferenceInCount) {
+async function getDefaultCandidateByCountySampleId(countyId, sampleId) {
+    try {
+        let pool = await sql.connect(config);
+
+        let resetResult = await pool.request()
+            .input('countyId', sql.Int, countyId)
+            .input('sampleId', sql.Int, sampleId)
+            .execute('usp_DBA_sampleAuditCandidate_reset');
+        return resetResult.recordsets;
+
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function updateCandidate(SampleCandidateId, CandidateName, ContestName ,Machine, HandToEye, DifferenceInCount) {
     console.log('updateFunction', SampleCandidateId, Machine, HandToEye, DifferenceInCount)
     try {
         let pool = await sql.connect(config);
@@ -127,12 +146,14 @@ async function updateCandidate(SampleCandidateId, CandidateName, Machine, HandTo
         let detail = await pool.request()
             .input('SampleCandidateId', sql.Int, SampleCandidateId)
             .input('CandidateName', sql.NVarChar, CandidateName)
+            .input('ContestName', sql.NVarChar, ContestName)
             .input('Machine', sql.Int, Machine)
             .input('HandToEye', sql.Int, HandToEye)
             .input('DifferenceInCount', sql.Int, DifferenceInCount)
-            .query(`UPDATE [ELECTION_AUDIT].[dbo].[SampleAuditCandidate]
+            .query(`UPDATE SampleAuditCandidate
                     SET
                     CandidateName=@CandidateName, 
+                    ContestName=@ContestName,
                     Machine =@Machine,
                     HandToEye = @HandToEye,
                     DifferenceInCount = @DifferenceInCount
@@ -148,6 +169,58 @@ async function updateCandidate(SampleCandidateId, CandidateName, Machine, HandTo
 }
 
 
+async function addCandidate(postBody) {
+
+    console.log('function',postBody )
+
+    try {
+        let pool = await sql.connect(config);
+        let insertCandidate = await pool.request()
+            .input('CountyId', sql.Int, postBody.CountyId)
+            .input('SampleId', sql.Int, postBody.SampleId)
+            .input('CandidateName',sql.NVarChar, postBody.CandidateName)
+            .input('Machine', sql.Int, postBody.Machine)
+            .input('HandToEye', sql.Int, postBody.HandToEye)
+            .input('DifferenceInCount', sql.Int, postBody.DifferenceInCount)
+            .query(`INSERT INTO SampleAuditCandidate 
+            (CountyId, SampleId, CandidateName,  Machine, HandToEye, DifferenceInCount)
+            VALUES (@CountyId, @SampleId, @CandidateName,  @Machine, @HandToEye, @DifferenceInCount);
+            `);
+        console.log(insertCandidate)
+        return insertCandidate.recordsets;
+        
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+}
+
+
+async function deleteCandidate(SampleCandidateId) {
+
+    console.log('SampleCandidateId',SampleCandidateId )
+
+    try {
+        let pool = await sql.connect(config);
+        let deleteCandidate = await pool.request()
+            .input('SampleCandidateId', sql.Int, SampleCandidateId)
+            .query(`DELETE FROM SampleAuditCandidate 
+            WHERE SampleCandidateId = @SampleCandidateId
+            `);
+
+        console.log(deleteCandidate)
+        return deleteCandidate.recordsets;
+        
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+}
+
+
+
 async function updateSample(Sample) {
     try {
         let pool = await sql.connect(config);
@@ -155,15 +228,12 @@ async function updateSample(Sample) {
         DateObject = new Date(Sample.DateOfCount);
         TimeObject = new Date(Sample.TimeOfCount);
 
-        console.log('og',Sample.DateOfCount)
+        console.log('in dboperation ',Sample)
 
         let date1 = String(Sample.DateOfCount)
         
         date1 = date1.slice(0, -1)
-        console.log('date1', date1)
-
-
-
+       
         // const date1 = String(DateObject.getMonth()) + "/" +String(DateObject.getDate()) + "/" + String(DateObject.getFullYear());
         // console.log(date1);
 
@@ -177,13 +247,13 @@ async function updateSample(Sample) {
 
         date2 = "05/31/1990" + " " + String(TimeObject.getHours()) + ":" + String(TimeObject.getMinutes()) + ":" + String(TimeObject.getSeconds());
   
-        console.log(date2)
+      
 
         //sql.DateTimeOffset
 
         let detail = await pool.request()
             .input('CountyId', sql.Int, Sample.CountyId)
-            .input('SampleId', sql.Int, Sample.SampleID)
+            .input('SampleId', sql.Int, Sample.SampleId)
             .input('DateOfCount', sql.Date, date1)
             .input('VotingEquipmentUsed', sql.NVarChar, Sample.VotingEquipmentUsed)
             .input('HumanOrMachineError', sql.NVarChar, Sample.HumanOrMachineError)
@@ -192,7 +262,7 @@ async function updateSample(Sample) {
             .input('TotalTime', sql.NVarChar, Sample.TotalTime)
             .input('CostOfCount', sql.SmallMoney, Sample.CostOfCount)
             .input('TimeOfCount', sql.DateTimeOffset, date2)
-            .query(`UPDATE [ELECTION_AUDIT].[dbo].[SampleAudit]
+            .query(`UPDATE SampleAudit
                     SET
                     DateOfCount =@DateOfCount,
                     TimeOfCount = @TimeOfCount,
@@ -211,6 +281,10 @@ async function updateSample(Sample) {
         console.log(error);
     }
 }
+
+
+
+
 
 
 async function addOrder(order) {
@@ -242,7 +316,10 @@ module.exports = {
     getCoutyValue: getCoutyValue,
     getSampleDetailByCountySampleId: getSampleDetailByCountySampleId,
     getCandidateByCountySampleId: getCandidateByCountySampleId,
+    getDefaultCandidateByCountySampleId:getDefaultCandidateByCountySampleId, 
     updateCandidate: updateCandidate,
     updateSample: updateSample,
+    addCandidate: addCandidate,
+    deleteCandidate: deleteCandidate,
     addOrder: addOrder
 }

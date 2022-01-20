@@ -20,11 +20,20 @@ router.get('/getDetailByCountySampleId/:countyid/:sampleid', sampleAuditControll
 
 router.get('/getCandidateByCountySampleId/:countyid/:sampleid', sampleAuditController.getCandidateByCountySampleIdCon)
 
+router.post('/getDefaultCandidateByCountySampleId', sampleAuditController.getDefaultCandidateByCountySampleIdCon)
+
 router.put('/updateCandidate', sampleAuditController.updateCandidateCon)
+
+router.post('/addCandidate' ,sampleAuditController.addCandidateCon)
 
 router.put('/updateSample', sampleAuditController.updateSampleCon)
 
 router.post('/orders', sampleAuditController.addOrderCon)
+
+router.delete('/deleteCandidate/:SampleCandidateId', sampleAuditController.deleteCandidateCon)
+
+
+
 
 
 module.exports = router;
