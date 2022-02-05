@@ -12,7 +12,9 @@ router.get('/getAllSample', sampleAuditController.getAllSampleCon)
 
 router.get('/getSample/:countyid', sampleAuditController.getSampleByCountyCon)
 
-router.get('/allCounty', sampleAuditController.getCountyValueCon)
+
+
+
 
 router.get('/getSampleIdByCounty/:countyid', sampleAuditController.getSampleIdByCountyCon)
 

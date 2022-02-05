@@ -146,7 +146,7 @@ const addOrderCon = async (req, res) => {
 }
 
 
-module.exports = {getAllSampleCon, getSampleByCountyCon, getCountyValueCon, getSampleIdByCountyCon,
+module.exports = {getAllSampleCon, getSampleByCountyCon,  getSampleIdByCountyCon,
                   getSampleDetailByCountySampleIdCon, getCandidateByCountySampleIdCon,
                   updateCandidateCon, updateSampleCon, addCandidateCon, addOrderCon,deleteCandidateCon,
                   getDefaultCandidateByCountySampleIdCon, }

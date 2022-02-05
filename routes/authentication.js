@@ -14,6 +14,10 @@ router.put('/check/:email', userController.getUserLogin)
 
 router.put('/updateWebUser', userController.updateWebUser )
 
+router.get('/allCounty', userController.getCountyValueCon)
+
+router.get('/getAppList', userController.getAppListCon)
+
 
 
 module.exports = router;
