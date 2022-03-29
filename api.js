@@ -10,6 +10,7 @@ const dboperations = require('./dboperations');
 const Db = require('./dboperations');
 const auth = require('./routes/authentication');
 const sampleAudit = require('./routes/sampleAuditRoutes');
+const BallotReconcile = require('./routes/ballot_RRoutes');
 
 
 
@@ -31,6 +32,7 @@ app.use(helmet());
 app.use(router);
 app.use('/auth', auth);
 app.use('/sampleAudit', sampleAudit)
+app.use('/ballotReconcile', BallotReconcile)
 
 router.use((request, response, next) => {
     console.log('middleware');

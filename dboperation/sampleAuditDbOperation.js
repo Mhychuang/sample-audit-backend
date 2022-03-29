@@ -48,19 +48,10 @@ async function getSampleByCounty(countyId) {
     }
 }
 
-async function getCoutyValue() {
-    try {
-        let pool = await sql.connect(config);
-        let queryString = `select distinct CountyId as value,  CountyName as label FROM SampleAudit`
-        let countyList = await pool.request().query(queryString);
-        console.log(countyList)
-        return countyList.recordsets;
 
-    }
-    catch (error) {
-        console.log(error);
-    }
-}
+
+
+
 
 async function getSampleDetailByCountySampleId(countyId, sampleId) {
     try {
@@ -313,7 +304,7 @@ module.exports = {
     getAllSample:  getAllSample,
     getSampleIdByCounty: getSampleIdByCounty,
     getSampleByCounty:   getSampleByCounty,
-    getCoutyValue: getCoutyValue,
+    
     getSampleDetailByCountySampleId: getSampleDetailByCountySampleId,
     getCandidateByCountySampleId: getCandidateByCountySampleId,
     getDefaultCandidateByCountySampleId:getDefaultCandidateByCountySampleId, 
@@ -321,5 +312,6 @@ module.exports = {
     updateSample: updateSample,
     addCandidate: addCandidate,
     deleteCandidate: deleteCandidate,
+    
     addOrder: addOrder
 }

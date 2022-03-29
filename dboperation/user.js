@@ -60,6 +60,60 @@ async function updatePassword(WebUserId, UserPassword) {
 }
 
 
+async function getCoutyValue() {
+    try {
+        let pool = await sql.connect(config);
+        let queryString = `select distinct CountyId as value,  CountyName as label FROM AuditCounty`
+        let countyList = await pool.request().query(queryString);
+        console.log(countyList)
+        return countyList.recordsets;
+
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
 
 
-module.exports = {getUser, getUserByEmail, updatePassword}
+async function getCoutyApps(CountyId) {
+    
+    try {
+        let pool = await sql.connect(config);
+        let apps = await pool.request()
+            .input('CountyId', sql.Int, CountyId)
+            .query(`
+                    select * from AuditCounty
+                    where CountyId =@CountyId
+                    `)
+        return apps.recordsets;
+
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+async function getAppList(){
+    try{
+        let pool = await sql.connect(config);
+        let queryString = 'SELECT AppName FROM AuditApps'
+        let appList = await pool.request().query(queryString);
+        console.log(appList);
+        return appList.recordsets
+
+
+    }catch (error){
+        console.log('getAppList in sampleAuditDbbbBoperation Error', error)
+        
+
+    }
+}
+
+
+
+
+module.exports = {getUser,
+     getUserByEmail,
+      updatePassword,
+      getCoutyValue: getCoutyValue,
+      getAppList:getAppList,getCoutyApps,}

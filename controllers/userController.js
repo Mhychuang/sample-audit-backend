@@ -1,4 +1,4 @@
-const { getUserByEmail, updatePassword } = require("../dboperation/user");
+const { getUserByEmail, updatePassword,getCoutyValue,getAppList,getCoutyApps } = require("../dboperation/user");
 
 
 
@@ -65,7 +65,73 @@ const updateWebUser = async (req, res) => {
 
 
 
+const getCountyValueCon = async (req, res) => {
+    try{
+        const result = await getCoutyValue()
+        console.log(result);
+        res.status(200).json(result[0]);
+        //res.json(result[0]);
+
+    }catch (error){
+        res.status(500)
+        console.log('here', error)
+        
+        console.error();
+        console.log(error.message);
 
 
 
-module.exports = { getUserLogin, updateWebUser, }
+    }
+
+
+}
+
+
+const getCountyAppsCon = async (req, res) => {
+   
+        let countyID = req.params.countyID;
+        
+
+
+    try{
+        const result = await getCoutyApps(countyID)
+        ogData = result[0][0]
+        list = []
+
+        for (const column in ogData ){
+            if (ogData[column] === 'YES'){
+                list.push(column)
+            }
+            
+        }
+
+        console.log(list)
+        
+        res.status(200).json(list);
+        
+
+    }catch (error){
+        res.status(500)
+        console.log('here', error)
+        
+        console.error();
+        console.log(error.message);
+
+
+
+    }
+}
+
+
+const getAppListCon = async (req, res) => {
+    getAppList().then(result => {
+        console.log(result);
+        res.json(result[0]);
+    })
+}
+
+
+
+
+
+module.exports = { getUserLogin, updateWebUser, getCountyValueCon,getAppListCon,getCountyAppsCon}
