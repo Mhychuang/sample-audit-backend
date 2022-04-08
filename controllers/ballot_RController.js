@@ -22,7 +22,7 @@ const getBallot_RByCounty_ID_CON = async (req, res) => {
 
 const getCountyNameVotingDate_CON = async (req, res) => {
 
-    console.log(req.params.countyid)
+    console.log('getCountyNameVotingDate_CON excuted', req.params.countyid)
 
     let data = {}
     let votingList = []

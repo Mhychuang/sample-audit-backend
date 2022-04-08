@@ -1,4 +1,4 @@
-const { getUserByEmail, updatePassword,getCoutyValue,getAppList,getCoutyApps } = require("../dboperation/user");
+const { getUserByEmail, updatePassword, getCoutyValue, getAppList, getCoutyApps } = require("../dboperation/user");
 
 
 
@@ -22,7 +22,7 @@ const getUserLogin = async (req, res) => {
 
         } else {
             console.log(userInfo[0][0].UserPassword)
-            
+
             if (password == userInfo[0][0].UserPassword) {
                 res.status(200).json(userInfo[0][0]);
             } else {
@@ -50,7 +50,7 @@ const updateWebUser = async (req, res) => {
     try {
         const result = await updatePassword(data.WebUserId, data.UserPassword)
 
-        res.status(200).send({message: 'Password Changed', userId: data.WebUserId});
+        res.status(200).send({ message: 'Password Changed', userId: data.WebUserId });
 
     } catch (error) {
         console.log('here', error)
@@ -66,16 +66,16 @@ const updateWebUser = async (req, res) => {
 
 
 const getCountyValueCon = async (req, res) => {
-    try{
+    try {
         const result = await getCoutyValue()
         console.log(result);
         res.status(200).json(result[0]);
         //res.json(result[0]);
 
-    }catch (error){
+    } catch (error) {
         res.status(500)
         console.log('here', error)
-        
+
         console.error();
         console.log(error.message);
 
@@ -88,37 +88,22 @@ const getCountyValueCon = async (req, res) => {
 
 
 const getCountyAppsCon = async (req, res) => {
-   
-        let countyID = req.params.countyID;
-        
-
-
-    try{
+    let countyID = req.params.countyID;
+    try {
         const result = await getCoutyApps(countyID)
         ogData = result[0][0]
         list = []
 
-        for (const column in ogData ){
-            if (ogData[column] === 'YES'){
+        for (const column in ogData) {
+            if (ogData[column] === 'YES') {
                 list.push(column)
             }
-            
         }
-
         console.log(list)
-        
         res.status(200).json(list);
-        
-
-    }catch (error){
+    } catch (error) {
         res.status(500)
-        console.log('here', error)
-        
-        console.error();
         console.log(error.message);
-
-
-
     }
 }
 
@@ -134,4 +119,4 @@ const getAppListCon = async (req, res) => {
 
 
 
-module.exports = { getUserLogin, updateWebUser, getCountyValueCon,getAppListCon,getCountyAppsCon}
+module.exports = { getUserLogin, updateWebUser, getCountyValueCon, getAppListCon, getCountyAppsCon }

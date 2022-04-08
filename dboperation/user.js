@@ -76,7 +76,6 @@ async function getCoutyValue() {
 
 
 async function getCoutyApps(CountyId) {
-    
     try {
         let pool = await sql.connect(config);
         let apps = await pool.request()
@@ -86,7 +85,6 @@ async function getCoutyApps(CountyId) {
                     where CountyId =@CountyId
                     `)
         return apps.recordsets;
-
     }
     catch (error) {
         console.log(error);

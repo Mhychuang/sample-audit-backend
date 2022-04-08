@@ -89,6 +89,7 @@ async function getballotReconcileDetailDetail(countyName, votingDate ){
                 ,[RecordCreateDate]
                 ,[RecordUpdateDate] from 
                 BallotReconcile where CountyName = @input_countyName and VotingDate = @input_date
+                order by [VotingSite], [BallotStyle]
                 `)
             return product.recordsets;
             
